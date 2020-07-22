@@ -2,7 +2,17 @@
 
 initialize() {
 	mkdir -p "$HOME/.config/bwall"
-	touch "$HOME/.config/bwall/bwall.conf"
+	config_file="$HOME/.config/bwall/bwall.conf"
+	touch "$config_file"
+
+	# Assign monitor resolution
+	monitor_resolution=$(xrandr | awk '/*/ {print $1}')
+	echo "monitor_resolution='$monitor_resolution'" >> $config_file
+
+	# Extract width and height from resolution
+	IFS='x' read -r monitor_width monitor_height <<< "$monitor_resolution"
+	echo "monitor_width='$monitor_width'" >> $config_file
+	echo "monitor_height='$monitor_height'" >> $config_file
 }
 
 if [ -f "$HOME/.config/bwall/bwall.conf" ]; then
