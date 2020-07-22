@@ -1,0 +1,12 @@
+#!/bin/bash
+
+initialize() {
+	mkdir -p "$HOME/.config/bwall"
+	touch "$HOME/.config/bwall/bwall.conf"
+}
+
+if [ -f "$HOME/.config/bwall/bwall.conf" ]; then
+	echo 'Config file found';
+else
+	initialize
+fi
