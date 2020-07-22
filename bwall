@@ -1,8 +1,9 @@
 #!/bin/bash
 
+config_file="$HOME/.config/bwall/bwall.conf"
+
 initialize() {
 	mkdir -p "$HOME/.config/bwall"
-	config_file="$HOME/.config/bwall/bwall.conf"
 	touch "$config_file"
 
 	# Assign monitor resolution
@@ -15,8 +16,15 @@ initialize() {
 	echo "monitor_height='$monitor_height'" >> $config_file
 }
 
+run_loop() {
+	source $config_file
+	echo $monitor_resolution
+	echo $monitor_width
+	echo $monitor_height
+}
+
 if [ -f "$HOME/.config/bwall/bwall.conf" ]; then
-	echo 'Config file found';
+	run_loop
 else
 	initialize
 fi
