@@ -47,7 +47,10 @@ set_clock() {
 
 run_loop() {
 	source $config_file
-	while sleep 1; do set_clock; done
+	while sleep $(perl -MTime::HiRes=gettimeofday -E '$n=gettimeofday; say 1-($n-int($n))')
+	do
+		set_clock
+	done
 }
 
 if [ -f "$HOME/.config/bwall/bwall.conf" ]; then
