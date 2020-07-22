@@ -1,26 +1,53 @@
 #!/bin/bash
 
 config_file="$HOME/.config/bwall/bwall.conf"
+config_dir="$HOME/.config/bwall"
 
 initialize() {
 	mkdir -p "$HOME/.config/bwall"
 	touch "$config_file"
 
-	# Assign monitor resolution
+	# Monitor Resolution
+	echo "# Monitor Resolution" >> $config_file
 	monitor_resolution=$(xrandr | awk '/*/ {print $1}')
 	echo "monitor_resolution='$monitor_resolution'" >> $config_file
 
-	# Extract width and height from resolution
+	# Width and Height
 	IFS='x' read -r monitor_width monitor_height <<< "$monitor_resolution"
 	echo "monitor_width='$monitor_width'" >> $config_file
 	echo "monitor_height='$monitor_height'" >> $config_file
+	echo >> $config_file
+
+	# Default background color
+	echo "background_color='#161616'" >> $config_file
+	echo >> $config_file
+
+	# Clock
+	echo "# Clock" >> $config_file
+	echo "clock_font='mononoki-Regular'" >> $config_file
+	echo "clock_color='white'" >> $config_file
+	echo "clock_size=70" >> $config_file
+	echo >> $config_file
+}
+
+set_clock() {
+	clock_time=$(date +'%H:%M:%S')
+	convert \
+		-size $monitor_resolution \
+		xc:$background_color \
+		-font $clock_font \
+		-fill $clock_color \
+		-pointsize $clock_size \
+		-gravity Center \
+		-draw "text 0,0 '$clock_time'" \
+		"$config_dir/background.png"
+
+	feh --bg-scale "$config_dir/background.png"
 }
 
 run_loop() {
 	source $config_file
-	echo $monitor_resolution
-	echo $monitor_width
-	echo $monitor_height
+	while sleep 1; do set_clock; done
 }
 
 if [ -f "$HOME/.config/bwall/bwall.conf" ]; then
