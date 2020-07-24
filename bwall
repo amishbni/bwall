@@ -47,9 +47,14 @@ set_clock() {
 
 run_loop() {
 	source $config_file
-	while sleep $(perl -MTime::HiRes=gettimeofday -E '$n=gettimeofday; say 1-($n-int($n))')
-	do
-		set_clock
+	trap 'set_clock&' USR1
+
+	while :; do
+	  kill -USR1 $$
+
+	  sleep .$((10**9-10#$(date +%N)))
+
+	  { kill -0 $! && kill $!; } 2>/dev/null
 	done
 }
 
