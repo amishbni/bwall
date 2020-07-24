@@ -27,11 +27,13 @@ initialize() {
 	echo "clock_font='mononoki-Regular'" >> $config_file
 	echo "clock_color='white'" >> $config_file
 	echo "clock_size=70" >> $config_file
+	echo "date_size=20" >> $config_file
 	echo >> $config_file
 }
 
 set_clock() {
 	clock_time=$(date +'%H:%M:%S')
+	today_date=$(date +'%A, %B %d, %Y')
 	convert \
 		-size $monitor_resolution \
 		xc:$background_color \
@@ -40,6 +42,8 @@ set_clock() {
 		-pointsize $clock_size \
 		-gravity Southwest \
 		-draw "text 22,10 '$clock_time'" \
+		-pointsize $date_size \
+		-draw "text 22,90 '$today_date'" \
 		"$config_dir/background.png"
 
 	feh --bg-scale "$config_dir/background.png"
