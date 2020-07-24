@@ -38,8 +38,8 @@ set_clock() {
 		-font $clock_font \
 		-fill $clock_color \
 		-pointsize $clock_size \
-		-gravity Center \
-		-draw "text 0,0 '$clock_time'" \
+		-gravity Southwest \
+		-draw "text 22,10 '$clock_time'" \
 		"$config_dir/background.png"
 
 	feh --bg-scale "$config_dir/background.png"
